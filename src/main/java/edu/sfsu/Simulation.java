@@ -36,15 +36,17 @@ public class Simulation {
     scheduler.addProcess(parentProcess);
     sleep(2000);
 
-    SimulatedProcess firstChild = SimulatedProcess.create(parentProcess.processNumber());
+    SimulatedProcess firstChild = SimulatedProcess.create(parentProcess.processNumber(), 100);
     scheduler.addProcess(firstChild);
     sleep(2000);
 
-    SimulatedProcess secondChild = SimulatedProcess.create(parentProcess.processNumber());
+
+    SimulatedProcess secondChild = SimulatedProcess.create(parentProcess.processNumber(),10);
     scheduler.addProcess(secondChild);
     sleep(2000);
 
-    SimulatedProcess thirdChild = SimulatedProcess.create(parentProcess.processNumber());
+
+    SimulatedProcess thirdChild = SimulatedProcess.create(parentProcess.processNumber(),50);
     scheduler.addProcess(thirdChild);
     sleep(2000);
 
@@ -58,14 +60,7 @@ public class Simulation {
     }
 
     // Remove them one by one with a delay.
-    scheduler.removeProcess(thirdChild);
-    sleep(2000);
-    scheduler.removeProcess(secondChild);
-    sleep(2000);
-    scheduler.removeProcess(firstChild);
-    sleep(2000);
-    scheduler.removeProcess(parentProcess);
-    sleep(2000);
+    scheduler.removeProcess();
 
   }
 

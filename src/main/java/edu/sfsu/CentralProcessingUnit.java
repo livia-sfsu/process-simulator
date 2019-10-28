@@ -41,6 +41,7 @@ class CentralProcessingUnit {
    */
   synchronized void runProcess(ProcessScheduler scheduler, SimulatedProcess process,
       int targetCycles) {
+    //System.out.println(process.priority + "I Am In RunProcess");
     runningProcess = new RunningProcess(process, targetCycles);
     this.scheduler = scheduler;
 
