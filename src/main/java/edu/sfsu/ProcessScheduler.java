@@ -1,8 +1,8 @@
 package edu.sfsu;
 
 import com.google.common.base.Preconditions;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 
 /**
  * Process Scheduler
@@ -10,12 +10,17 @@ import java.util.Map;
  * Instructions: upgrade the current round-robin implementation to a priority based one. This is the
  * most important part of your assignment. Remember that each process has its own priority.
  */
+
+
+
+
 class ProcessScheduler {
 
   private static final int RUN_CYCLES = 5; // Default number of cycles given to each process on a single run.
   private final Map<Integer, SimulatedProcess> processControlBlock = new HashMap<>();
   private final CentralProcessingUnit cpu;
   private int lastAssignedProcessNumber = 0;
+
 
   // Prevent direct instantiation.
   private ProcessScheduler(CentralProcessingUnit cpu) {
@@ -38,10 +43,21 @@ class ProcessScheduler {
     // TODO: replace this ROUND-ROBIN SOLUTION.
     int currentRunningProcess = process.processNumber();
     if (processControlBlock.containsKey(currentRunningProcess + 1)) {
-      SimulatedProcess nextProcess = processControlBlock.get(currentRunningProcess + 1);
-      cpu.runProcess(this, nextProcess, RUN_CYCLES);
+
+      Iterator iter = processControlBlock.keySet().iterator();
+      SimulatedProcess PriorityProcess=null;
+      while (iter.hasNext()){
+        //find out the max priority process in hashmap
+        SimulatedProcess nextProcess= (SimulatedProcess) iter.next();
+        SimulatedProcess nextProcess1=processControlBlock.get(nextProcess.processNumber()+1);
+        if(nextProcess.compareTo(nextProcess1)==1){
+          PriorityProcess=nextProcess;
+        }
+      }
+      cpu.runProcess(this, PriorityProcess, RUN_CYCLES);
     }
   }
+
 
   /**
    * Add a single process.
