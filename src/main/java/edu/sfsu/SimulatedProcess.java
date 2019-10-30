@@ -53,7 +53,7 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
     cycles++;
     System.out.print(
         String.format(
-            "Process %d, Parent %d, Cycle %d\n", processNumber, parentProcessNumber, cycles));
+            "Process %d, Parent %d, Priority %d, Cycle %d\n", processNumber, parentProcessNumber, priority, cycles));
   }
 
   /**
@@ -103,6 +103,6 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
    */
   @Override
   public int compareTo(SimulatedProcess o) {
-    return Integer.compare(priority, o.priority);
+    return Integer.compare(o.priority, priority);
   }
 }
