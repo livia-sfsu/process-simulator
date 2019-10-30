@@ -10,12 +10,12 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
 
   // Constants used to define standard priorities.
   static final int LOW_PRIORITY = 10;
-  static final int NORMAL_PRIORITY = 50;
+  static final int MEDIUM_PRIORITY = 50;
   static final int HIGH_PRIORITY = 100;
 
   private int processNumber = 0;
   private int parentProcessNumber = 0;
-  private int priority = NORMAL_PRIORITY;
+  private int priority = MEDIUM_PRIORITY;
   private int cycles = 0; // The number of cycles this process has run.
 
   // Prevent direct instantiation, use create instead.
@@ -28,7 +28,7 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
    * @param parent the parent process number.
    */
   static SimulatedProcess create(int parent) {
-    return create(parent, NORMAL_PRIORITY);
+    return create(parent, MEDIUM_PRIORITY);
   }
 
   /**
@@ -53,7 +53,7 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
     cycles++;
     System.out.print(
         String.format(
-            "Process %d, Parent %d, Cycle %d\n", processNumber, parentProcessNumber, cycles));
+            "Process %d, Parent %d, Priority %d, Cycle %d\n", processNumber, parentProcessNumber, priority, cycles));
   }
 
   /**
@@ -76,6 +76,8 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
   int cycles() {
     return cycles;
   }
+
+  int getPriority() { return priority; }
 
   /**
    * One process is equal to another when they have the same process number.
@@ -102,7 +104,10 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
    * higher priority than another.
    */
   @Override
-  public int compareTo(SimulatedProcess o) {
-    return Integer.compare(priority, o.priority);
+  public int compareTo(SimulatedProcess o)
+  {
+    //Switched the priority to be compared to be this process's priority vs. the new process to see if this process
+    // has a higher priority than this one.
+    return Integer.compare(o.priority, this.priority);
   }
 }

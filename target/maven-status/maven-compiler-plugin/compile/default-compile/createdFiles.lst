@@ -1,6 +1,6 @@
-edu/sfsu/CentralProcessingUnit$1.class
-edu/sfsu/Simulation.class
-edu/sfsu/ProcessScheduler.class
-edu/sfsu/CentralProcessingUnit$RunningProcess.class
-edu/sfsu/CentralProcessingUnit.class
-edu/sfsu/SimulatedProcess.class
+edu\sfsu\SimulatedProcess.class
+edu\sfsu\ProcessScheduler.class
+edu\sfsu\Simulation.class
+edu\sfsu\CentralProcessingUnit$1.class
+edu\sfsu\CentralProcessingUnit$RunningProcess.class
+edu\sfsu\CentralProcessingUnit.class
