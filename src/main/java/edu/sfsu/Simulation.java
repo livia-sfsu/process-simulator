@@ -12,15 +12,14 @@ public class Simulation {
   /**
    * TODO: Complete this function. Use the roundRobinSimulation function as an example.
    */
-  static void prioritySimulation() throws InterruptedException {
-  }
+
 
   /**
    * Simulates a round-robin implementation of a process scheduler.
    *
    * THIS IS ONLY AN EXAMPLE.
    */
-  static void roundRobinSimulation() throws InterruptedException {
+  static void prioritySimulation() throws InterruptedException {
     System.out.println("Simulation starting.");
 
     CentralProcessingUnit cpu = new CentralProcessingUnit();
@@ -66,7 +65,7 @@ public class Simulation {
 
   public static void main(String[] args) throws InterruptedException {
     // TODO: call prioritySimulation() instead.
-    Simulation.roundRobinSimulation();
+    Simulation.prioritySimulation();
     System.out.println("END OF PROGRAM");
   }
 }

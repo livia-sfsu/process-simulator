@@ -49,7 +49,10 @@ class ProcessScheduler {
     Iterator<SimulatedProcess> itr = priorityProcess.iterator();
     if(itr.hasNext()){
       SimulatedProcess sp = itr.next();
-      cpu.runProcess(this,sp, RUN_CYCLES);
+      if(sp.cycles() > 0)
+        System.out.printf("-->Resuming process number %d<---\n",sp.processNumber());
+      cpu.runProcess(this,sp, RUN_CYCLES - sp.cycles());
+      lastprocess = sp;
       itr.remove();
     }
     processControlBlock.put(process.processNumber(),process);
@@ -61,6 +64,13 @@ class ProcessScheduler {
   /**
    * Add a single process.
    */
+  private SimulatedProcess lastprocess = null;
+
+  synchronized  void rerunProcess(int cycles){
+    cpu.runProcess(this,priorityProcess.peek(), 5);
+    priorityProcess.poll();
+  }
+
   synchronized void addProcess(SimulatedProcess process) {
     lastAssignedProcessNumber++;
     process.setProcessNumber(lastAssignedProcessNumber);
@@ -70,12 +80,24 @@ class ProcessScheduler {
 
     System.out.println("****Adding Process Number: " + process.processNumber() + " With priority "+ process.getPriority()+ "****"); // This is where I test priority and to debug.
     priorityProcess.add(process);
+
+    if(lastprocess != null) {
+      //System.out.println(process.compareTo(lastprocess));
+      //System.out.println(process.getPriority() + "--" + lastprocess.getPriority());
+      if (process.compareTo(lastprocess) == 1) {
+        System.out.println("Add has interupted");
+        cpu.setInterupt(true);
+      }
+    }
+
+
     //Test to see if priority was working
 
     if (cpu.isIdle()) {
       System.out.println("I AM IDLE -- Will run current process");
       cpu.runProcess(this, process, RUN_CYCLES);
-      priorityProcess.poll();
+      lastprocess = process;
+      //priorityProcess.poll();
     }
   }
 
