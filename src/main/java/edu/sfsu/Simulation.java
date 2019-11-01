@@ -12,15 +12,14 @@ public class Simulation {
   /**
    * TODO: Complete this function. Use the roundRobinSimulation function as an example.
    */
-  static void prioritySimulation() throws InterruptedException {
-  }
+
 
   /**
    * Simulates a round-robin implementation of a process scheduler.
    *
    * THIS IS ONLY AN EXAMPLE.
    */
-  static void roundRobinSimulation() throws InterruptedException {
+  static void prioritySimulation() throws InterruptedException {
     System.out.println("Simulation starting.");
 
     CentralProcessingUnit cpu = new CentralProcessingUnit();
@@ -36,15 +35,17 @@ public class Simulation {
     scheduler.addProcess(parentProcess);
     sleep(2000);
 
-    SimulatedProcess firstChild = SimulatedProcess.create(parentProcess.processNumber());
+    SimulatedProcess firstChild = SimulatedProcess.create(parentProcess.processNumber(), 100);
     scheduler.addProcess(firstChild);
     sleep(2000);
 
-    SimulatedProcess secondChild = SimulatedProcess.create(parentProcess.processNumber());
+
+    SimulatedProcess secondChild = SimulatedProcess.create(parentProcess.processNumber(),10);
     scheduler.addProcess(secondChild);
     sleep(2000);
 
-    SimulatedProcess thirdChild = SimulatedProcess.create(parentProcess.processNumber());
+
+    SimulatedProcess thirdChild = SimulatedProcess.create(parentProcess.processNumber(),50);
     scheduler.addProcess(thirdChild);
     sleep(2000);
 
@@ -58,20 +59,13 @@ public class Simulation {
     }
 
     // Remove them one by one with a delay.
-    scheduler.removeProcess(thirdChild);
-    sleep(2000);
-    scheduler.removeProcess(secondChild);
-    sleep(2000);
-    scheduler.removeProcess(firstChild);
-    sleep(2000);
-    scheduler.removeProcess(parentProcess);
-    sleep(2000);
+    scheduler.removeProcess();
 
   }
 
   public static void main(String[] args) throws InterruptedException {
     // TODO: call prioritySimulation() instead.
-    Simulation.roundRobinSimulation();
+    Simulation.prioritySimulation();
     System.out.println("END OF PROGRAM");
   }
 }

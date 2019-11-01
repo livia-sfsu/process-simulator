@@ -53,7 +53,7 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
     cycles++;
     System.out.print(
         String.format(
-            "Process %d, Parent %d, Cycle %d\n", processNumber, parentProcessNumber, cycles));
+            "Process %d, Parent %d, Cycle %d, Priority %d\n", processNumber, parentProcessNumber, cycles, priority));
   }
 
   /**
@@ -63,6 +63,11 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
     Preconditions.checkArgument(processNumber == 0,
         "Cannot change the process number once it's been set.");
     processNumber = number;
+  }
+
+  //Testing purposes only
+  int getPriority(){
+    return this.priority;
   }
 
   int processNumber() {

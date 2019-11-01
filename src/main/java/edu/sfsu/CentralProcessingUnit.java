@@ -16,6 +16,7 @@ class CentralProcessingUnit {
   private Timer timer = new Timer("Simulation system timer", true);
   private RunningProcess runningProcess = null;
   private ProcessScheduler scheduler = null;
+  private boolean processInterupt = false;
 
   /**
    * Creates a CPU that simulates one cycle every cycleDuration.
@@ -41,6 +42,7 @@ class CentralProcessingUnit {
    */
   synchronized void runProcess(ProcessScheduler scheduler, SimulatedProcess process,
       int targetCycles) {
+    //System.out.println(process.priority + "I Am In RunProcess");
     runningProcess = new RunningProcess(process, targetCycles);
     this.scheduler = scheduler;
 
@@ -56,6 +58,10 @@ class CentralProcessingUnit {
     return runningProcess == null;
   }
 
+
+  void setInterupt(boolean interupt){
+    processInterupt = true;
+  }
   /**
    * Called on each cycle.
    */
@@ -68,7 +74,13 @@ class CentralProcessingUnit {
         SimulatedProcess doneProcess = runningProcess.process;
         runningProcess = null;
         scheduler.processDone(doneProcess);
-      } else {
+      }
+      else if(processInterupt){
+        System.out.println("Interupted");
+        scheduler.rerunProcess(runningProcess.targetCycles() - runningProcess.elapsedCycles());
+        processInterupt = false;
+      }
+      else {
         runningProcess.tick();
       }
     } else {
