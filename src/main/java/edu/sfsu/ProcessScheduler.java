@@ -20,7 +20,7 @@ class ProcessScheduler {
   private final Map<Integer, SimulatedProcess> processControlBlock = new HashMap<>();
   private final CentralProcessingUnit cpu;
   private int lastAssignedProcessNumber = 0;
-
+  private Queue<SimulatedProcess> PriorityQueue=new PriorityQueue<SimulatedProcess>(SimulatedProcess::compareTo);
 
   // Prevent direct instantiation.
   private ProcessScheduler(CentralProcessingUnit cpu) {
@@ -41,20 +41,9 @@ class ProcessScheduler {
    */
   void processDone(SimulatedProcess process) {
     // TODO: replace this ROUND-ROBIN SOLUTION.
-    int currentRunningProcess = process.processNumber();
-    if (processControlBlock.containsKey(currentRunningProcess + 1)) {
+    if(!PriorityQueue.isEmpty()){
+      cpu.runProcess(this,PriorityQueue.poll(),RUN_CYCLES);
 
-      Iterator iter = processControlBlock.keySet().iterator();
-      SimulatedProcess PriorityProcess=null;
-      while (iter.hasNext()){
-        //find out the max priority process in hashmap
-        SimulatedProcess nextProcess= (SimulatedProcess) iter.next();
-        SimulatedProcess nextProcess1=processControlBlock.get(nextProcess.processNumber()+1);
-        if(nextProcess.compareTo(nextProcess1)==1){
-          PriorityProcess=nextProcess;
-        }
-      }
-      cpu.runProcess(this, PriorityProcess, RUN_CYCLES);
     }
   }
 
@@ -67,9 +56,10 @@ class ProcessScheduler {
     process.setProcessNumber(lastAssignedProcessNumber);
 
     // Priority is ignored in this version.
-    processControlBlock.put(lastAssignedProcessNumber, process);
+//    processControlBlock.put(lastAssignedProcessNumber, process);
+     PriorityQueue.add(process);
     if (cpu.isIdle()) {
-      cpu.runProcess(this, process, RUN_CYCLES);
+      cpu.runProcess(this,PriorityQueue.poll(), RUN_CYCLES);
     }
   }
 
@@ -77,7 +67,7 @@ class ProcessScheduler {
    * Removes a process from the PBC.
    */
   void removeProcess(SimulatedProcess p) {
-    processControlBlock.remove(p.processNumber());
+    PriorityQueue.remove(p.processNumber());
   }
 
 }
