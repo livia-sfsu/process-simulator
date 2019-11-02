@@ -13,6 +13,8 @@ public class Simulation {
    * TODO: Complete this function. Use the roundRobinSimulation function as an example.
    */
   static void prioritySimulation() throws InterruptedException {
+    System.out.println("Priority Simulation starting.");
+    simulation();
   }
 
   /**
@@ -21,6 +23,11 @@ public class Simulation {
    * THIS IS ONLY AN EXAMPLE.
    */
   static void roundRobinSimulation() throws InterruptedException {
+    System.out.println("Round Robin Simulation");
+    simulation();
+  }
+
+  static void simulation() throws InterruptedException{
     System.out.println("Simulation starting.");
 
     CentralProcessingUnit cpu = new CentralProcessingUnit();
@@ -66,12 +73,11 @@ public class Simulation {
     sleep(2000);
     scheduler.removeProcess(parentProcess);
     sleep(2000);
-
   }
 
   public static void main(String[] args) throws InterruptedException {
     // TODO: call prioritySimulation() instead.
-    Simulation.roundRobinSimulation();
+    Simulation.prioritySimulation();
     System.out.println("END OF PROGRAM");
   }
 }

@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
 /**
  * Simulates a process with a priority.
  */
-public class SimulatedProcess implements Comparable<SimulatedProcess> {
+public class SimulatedProcess implements Comparable<SimulatedProcess>{
 
   // Constants used to define standard priorities.
   static final int LOW_PRIORITY = 10;
@@ -103,6 +103,6 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
    */
   @Override
   public int compareTo(SimulatedProcess o) {
-    return Integer.compare(priority, o.priority);
+    return Integer.compare(o.priority, priority);
   }
 }

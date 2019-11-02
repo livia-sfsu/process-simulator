@@ -3,6 +3,7 @@ package edu.sfsu;
 import com.google.common.base.Preconditions;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 /**
  * Process Scheduler
@@ -16,6 +17,8 @@ class ProcessScheduler {
   private final Map<Integer, SimulatedProcess> processControlBlock = new HashMap<>();
   private final CentralProcessingUnit cpu;
   private int lastAssignedProcessNumber = 0;
+
+  private PriorityQueue<SimulatedProcess> pq = new PriorityQueue<>(SimulatedProcess::compareTo);
 
   // Prevent direct instantiation.
   private ProcessScheduler(CentralProcessingUnit cpu) {
@@ -36,10 +39,9 @@ class ProcessScheduler {
    */
   void processDone(SimulatedProcess process) {
     // TODO: replace this ROUND-ROBIN SOLUTION.
-    int currentRunningProcess = process.processNumber();
-    if (processControlBlock.containsKey(currentRunningProcess + 1)) {
-      SimulatedProcess nextProcess = processControlBlock.get(currentRunningProcess + 1);
-      cpu.runProcess(this, nextProcess, RUN_CYCLES);
+    if (!pq.isEmpty()) {
+      SimulatedProcess next = pq.poll();
+      cpu.runProcess(this, next, RUN_CYCLES);
     }
   }
 
@@ -51,9 +53,9 @@ class ProcessScheduler {
     process.setProcessNumber(lastAssignedProcessNumber);
 
     // Priority is ignored in this version.
-    processControlBlock.put(lastAssignedProcessNumber, process);
+    pq.add(process);
     if (cpu.isIdle()) {
-      cpu.runProcess(this, process, RUN_CYCLES);
+      cpu.runProcess(this, pq.poll(), RUN_CYCLES);
     }
   }
 
@@ -61,7 +63,7 @@ class ProcessScheduler {
    * Removes a process from the PBC.
    */
   void removeProcess(SimulatedProcess p) {
-    processControlBlock.remove(p.processNumber());
+    pq.remove(p.processNumber());
   }
 
 }
