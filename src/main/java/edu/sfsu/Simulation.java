@@ -13,6 +13,36 @@ public class Simulation {
    * TODO: Complete this function. Use the roundRobinSimulation function as an example.
    */
   static void prioritySimulation() throws InterruptedException {
+    System.out.println("Simulation starting.");
+
+    CentralProcessingUnit cpu = new CentralProcessingUnit();
+    ProcessScheduler scheduler = ProcessScheduler.create(cpu);
+
+    // Sleep for 5 seconds to show a few NO-OPs.
+    for (int i = 0; i < 5; i++) {
+      sleep(1000);
+    }
+
+    // Add a few processes
+    SimulatedProcess parentProcess = SimulatedProcess.create(0,50);
+    scheduler.addProcess(parentProcess);
+    sleep(2000);
+    SimulatedProcess p2 = SimulatedProcess.create(1,50);
+    scheduler.addProcess(p2);
+    sleep(2000);
+    SimulatedProcess p3 = SimulatedProcess.create(2,100);
+    scheduler.addProcess(p3);
+    sleep(2000);
+
+    // Sleep for 1 minute, let the processes run.
+    for (int i = 0; i < 60; i++) {
+      try {
+        sleep(1000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+
   }
 
   /**
@@ -71,7 +101,7 @@ public class Simulation {
 
   public static void main(String[] args) throws InterruptedException {
     // TODO: call prioritySimulation() instead.
-    Simulation.roundRobinSimulation();
+    Simulation.prioritySimulation();
     System.out.println("END OF PROGRAM");
   }
 }

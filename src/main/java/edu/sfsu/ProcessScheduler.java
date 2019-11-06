@@ -1,6 +1,9 @@
 package edu.sfsu;
 
 import com.google.common.base.Preconditions;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,10 +15,31 @@ import java.util.Map;
  */
 class ProcessScheduler {
 
+  class ProcessControlBlock{
+    ArrayList<SimulatedProcess> processes = new ArrayList<>();
+    void sortProcesses(){
+      Collections.sort(processes, Collections.reverseOrder());
+    }
+    boolean checkQueue(){
+      return !processes.isEmpty();
+    }
+    void addProcess(SimulatedProcess p){
+      processes.add(p);
+    }
+
+    void removeProcess(SimulatedProcess p){
+      processes.remove(p);
+    }
+
+    SimulatedProcess getNextProcess(){
+      return processes.get(0);
+    }
+  }
+
   private static final int RUN_CYCLES = 5; // Default number of cycles given to each process on a single run.
-  private final Map<Integer, SimulatedProcess> processControlBlock = new HashMap<>();
   private final CentralProcessingUnit cpu;
   private int lastAssignedProcessNumber = 0;
+  private final ProcessControlBlock pcb = new ProcessControlBlock();
 
   // Prevent direct instantiation.
   private ProcessScheduler(CentralProcessingUnit cpu) {
@@ -35,12 +59,9 @@ class ProcessScheduler {
    * instead.
    */
   void processDone(SimulatedProcess process) {
-    // TODO: replace this ROUND-ROBIN SOLUTION.
-    int currentRunningProcess = process.processNumber();
-    if (processControlBlock.containsKey(currentRunningProcess + 1)) {
-      SimulatedProcess nextProcess = processControlBlock.get(currentRunningProcess + 1);
-      cpu.runProcess(this, nextProcess, RUN_CYCLES);
-    }
+    pcb.removeProcess(process);
+    if(pcb.checkQueue())
+      cpu.runProcess(this,pcb.getNextProcess(),RUN_CYCLES);
   }
 
   /**
@@ -51,7 +72,8 @@ class ProcessScheduler {
     process.setProcessNumber(lastAssignedProcessNumber);
 
     // Priority is ignored in this version.
-    processControlBlock.put(lastAssignedProcessNumber, process);
+    pcb.addProcess(process);
+    pcb.sortProcesses();
     if (cpu.isIdle()) {
       cpu.runProcess(this, process, RUN_CYCLES);
     }
@@ -61,7 +83,7 @@ class ProcessScheduler {
    * Removes a process from the PBC.
    */
   void removeProcess(SimulatedProcess p) {
-    processControlBlock.remove(p.processNumber());
+    pcb.removeProcess(p);
   }
 
 }
