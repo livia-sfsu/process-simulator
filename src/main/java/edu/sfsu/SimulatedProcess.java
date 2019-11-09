@@ -103,6 +103,7 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
    */
   @Override
   public int compareTo(SimulatedProcess o) {
-    return Integer.compare(priority, o.priority);
+
+    return Integer.compare(o.priority, priority);
   }
 }

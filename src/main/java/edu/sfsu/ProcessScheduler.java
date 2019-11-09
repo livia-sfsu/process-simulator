@@ -1,6 +1,7 @@
 package edu.sfsu;
 
 import com.google.common.base.Preconditions;
+import java.util.PriorityQueue;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ class ProcessScheduler {
 
   private static final int RUN_CYCLES = 5; // Default number of cycles given to each process on a single run.
   private final Map<Integer, SimulatedProcess> processControlBlock = new HashMap<>();
+  private final PriorityQueue<SimulatedProcess> priorityQueue = new PriorityQueue<>(SimulatedProcess::compareTo);
   private final CentralProcessingUnit cpu;
   private int lastAssignedProcessNumber = 0;
 
@@ -36,10 +38,15 @@ class ProcessScheduler {
    */
   void processDone(SimulatedProcess process) {
     // TODO: replace this ROUND-ROBIN SOLUTION.
-    int currentRunningProcess = process.processNumber();
-    if (processControlBlock.containsKey(currentRunningProcess + 1)) {
-      SimulatedProcess nextProcess = processControlBlock.get(currentRunningProcess + 1);
-      cpu.runProcess(this, nextProcess, RUN_CYCLES);
+//    int currentRunningProcess = process.processNumber();
+//    if (processControlBlock.containsKey(currentRunningProcess + 1)) {
+//      SimulatedProcess nextProcess = processControlBlock.get(currentRunningProcess + 1);
+//      cpu.runProcess(this, nextProcess, RUN_CYCLES);
+//    }
+    SimulatedProcess next = priorityQueue.poll();
+    if( next != null ) {
+
+      cpu.runProcess(this, next, RUN_CYCLES);
     }
   }
 
@@ -51,17 +58,27 @@ class ProcessScheduler {
     process.setProcessNumber(lastAssignedProcessNumber);
 
     // Priority is ignored in this version.
-    processControlBlock.put(lastAssignedProcessNumber, process);
+//    processControlBlock.put(lastAssignedProcessNumber, process);
+//    if (cpu.isIdle()) {
+//      cpu.runProcess(this, process, RUN_CYCLES);
+//    }
+    priorityQueue.add(process);
+
     if (cpu.isIdle()) {
-      cpu.runProcess(this, process, RUN_CYCLES);
+      SimulatedProcess highestPriorityProcess = priorityQueue.poll();
+      cpu.runProcess(this, highestPriorityProcess, RUN_CYCLES);
     }
+
   }
 
   /**
    * Removes a process from the PBC.
    */
   void removeProcess(SimulatedProcess p) {
-    processControlBlock.remove(p.processNumber());
+    int processNumber = p.processNumber();
+    if (priorityQueue.remove(p)) {
+      System.out.println(" removing process " + processNumber );
+    }
   }
 
 }

@@ -10,14 +10,24 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
-            <source>11</source>
-            <target>11</target>
+            <source>10</source>
+            <target>10</target>
           </configuration>
           <groupId>org.apache.maven.plugins</groupId>
           <version>3.8.1</version>
         </plugin>
       </plugins>
     </pluginManagement>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                  <source>1.8</source>
+                  <target>1.8</target>
+              </configuration>
+          </plugin>
+      </plugins>
   </build>
   <dependencies>
     <dependency>
@@ -33,8 +43,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <properties>
-    <maven.compiler.source>1.11</maven.compiler.source>
-    <maven.compiler.target>1.11</maven.compiler.target>
+    <maven.compiler.source>1.10</maven.compiler.source>
+    <maven.compiler.target>1.10</maven.compiler.target>
   </properties>
 
 

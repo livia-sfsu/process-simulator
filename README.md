@@ -9,6 +9,7 @@ needed.
 This project uses Maven to manage its dependencies. To run:
 
 ```bash
+mvn compile
 mvn exec:java -Dexec.mainClass="edu.sfsu.Simulation"
 ```
 

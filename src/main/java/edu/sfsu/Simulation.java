@@ -16,11 +16,12 @@ public class Simulation {
   }
 
   /**
-   * Simulates a round-robin implementation of a process scheduler.
+   * Simulates a priority queue implementation of a process scheduler.
    *
    * THIS IS ONLY AN EXAMPLE.
    */
-  static void roundRobinSimulation() throws InterruptedException {
+  static void priorityQueueSimulation() throws InterruptedException {
+
     System.out.println("Simulation starting.");
 
     CentralProcessingUnit cpu = new CentralProcessingUnit();
@@ -36,15 +37,15 @@ public class Simulation {
     scheduler.addProcess(parentProcess);
     sleep(2000);
 
-    SimulatedProcess firstChild = SimulatedProcess.create(parentProcess.processNumber());
+    SimulatedProcess firstChild = SimulatedProcess.create(parentProcess.processNumber(), SimulatedProcess.LOW_PRIORITY);
     scheduler.addProcess(firstChild);
     sleep(2000);
 
-    SimulatedProcess secondChild = SimulatedProcess.create(parentProcess.processNumber());
+    SimulatedProcess secondChild = SimulatedProcess.create(parentProcess.processNumber(), SimulatedProcess.NORMAL_PRIORITY);
     scheduler.addProcess(secondChild);
     sleep(2000);
 
-    SimulatedProcess thirdChild = SimulatedProcess.create(parentProcess.processNumber());
+    SimulatedProcess thirdChild = SimulatedProcess.create(parentProcess.processNumber(), SimulatedProcess.HIGH_PRIORITY);
     scheduler.addProcess(thirdChild);
     sleep(2000);
 
@@ -71,7 +72,7 @@ public class Simulation {
 
   public static void main(String[] args) throws InterruptedException {
     // TODO: call prioritySimulation() instead.
-    Simulation.roundRobinSimulation();
+    Simulation.priorityQueueSimulation();
     System.out.println("END OF PROGRAM");
   }
 }
