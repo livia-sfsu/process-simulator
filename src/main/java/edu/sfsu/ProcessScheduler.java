@@ -3,6 +3,7 @@ package edu.sfsu;
 import com.google.common.base.Preconditions;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 /**
  * Process Scheduler
@@ -16,6 +17,7 @@ class ProcessScheduler {
   private final Map<Integer, SimulatedProcess> processControlBlock = new HashMap<>();
   private final CentralProcessingUnit cpu;
   private int lastAssignedProcessNumber = 0;
+  private PriorityQueue<SimulatedProcess> pq = new PriorityQueue<>();
 
   // Prevent direct instantiation.
   private ProcessScheduler(CentralProcessingUnit cpu) {
@@ -35,10 +37,8 @@ class ProcessScheduler {
    * instead.
    */
   void processDone(SimulatedProcess process) {
-    // TODO: replace this ROUND-ROBIN SOLUTION.
-    int currentRunningProcess = process.processNumber();
-    if (processControlBlock.containsKey(currentRunningProcess + 1)) {
-      SimulatedProcess nextProcess = processControlBlock.get(currentRunningProcess + 1);
+    if (!pq.isEmpty()){
+      SimulatedProcess nextProcess = pq.peek();
       cpu.runProcess(this, nextProcess, RUN_CYCLES);
     }
   }
@@ -49,10 +49,13 @@ class ProcessScheduler {
   synchronized void addProcess(SimulatedProcess process) {
     lastAssignedProcessNumber++;
     process.setProcessNumber(lastAssignedProcessNumber);
-
-    // Priority is ignored in this version.
     processControlBlock.put(lastAssignedProcessNumber, process);
+    pq.add(process);
+
     if (cpu.isIdle()) {
+      cpu.runProcess(this, process, RUN_CYCLES);
+    } else if (process.compareTo(pq.peek()) != 1) {
+      process  =  pq.peek();
       cpu.runProcess(this, process, RUN_CYCLES);
     }
   }

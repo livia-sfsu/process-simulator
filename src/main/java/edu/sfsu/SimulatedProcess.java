@@ -3,6 +3,8 @@ package edu.sfsu;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
+import java.util.Random;
+
 /**
  * Simulates a process with a priority.
  */
@@ -40,7 +42,20 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
   static SimulatedProcess create(int parent, int priority) {
     SimulatedProcess result = new SimulatedProcess();
     result.parentProcessNumber = parent;
-    result.priority = priority;
+
+    Random r = new Random();
+    int randPriority = r.nextInt(3);
+    switch (randPriority) {
+      case 0:
+        result.priority = LOW_PRIORITY;
+        break;
+      case 1:
+        result.priority = NORMAL_PRIORITY;
+        break;
+      case 2:
+        result.priority = HIGH_PRIORITY;
+        break;
+    }
     return result;
   }
 
@@ -53,7 +68,7 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
     cycles++;
     System.out.print(
         String.format(
-            "Process %d, Parent %d, Cycle %d\n", processNumber, parentProcessNumber, cycles));
+            "Process %d, Parent %d, Cycle %d, Priority %d\n", processNumber, parentProcessNumber, cycles, priority));
   }
 
   /**
@@ -103,6 +118,6 @@ public class SimulatedProcess implements Comparable<SimulatedProcess> {
    */
   @Override
   public int compareTo(SimulatedProcess o) {
-    return Integer.compare(priority, o.priority);
+    return Integer.compare(o.priority, priority);
   }
 }
