@@ -1,8 +1,12 @@
 package edu.sfsu;
 
 import com.google.common.base.Preconditions;
-import java.util.HashMap;
-import java.util.Map;
+//import com.google.common.collect.MinMaxPriorityQueue;
+
+//import java.util.HashMap;
+//import java.util.Map;
+
+import java.util.PriorityQueue;
 
 /**
  * Process Scheduler
@@ -13,7 +17,7 @@ import java.util.Map;
 class ProcessScheduler {
 
   private static final int RUN_CYCLES = 5; // Default number of cycles given to each process on a single run.
-  private final Map<Integer, SimulatedProcess> processControlBlock = new HashMap<>();
+  private final PriorityQueue<SimulatedProcess> processControlBlock = new PriorityQueue<>();
   private final CentralProcessingUnit cpu;
   private int lastAssignedProcessNumber = 0;
 
@@ -35,10 +39,10 @@ class ProcessScheduler {
    * instead.
    */
   void processDone(SimulatedProcess process) {
-    // TODO: replace this ROUND-ROBIN SOLUTION.
-    int currentRunningProcess = process.processNumber();
-    if (processControlBlock.containsKey(currentRunningProcess + 1)) {
-      SimulatedProcess nextProcess = processControlBlock.get(currentRunningProcess + 1);
+    /*TODO: replace this ROUND-ROBIN SOLUTION.*/
+    if (processControlBlock.peek() != null) { //peek is head element
+      SimulatedProcess nextProcess = processControlBlock.poll(); // poll removes head and appends to nextProcess
+
       cpu.runProcess(this, nextProcess, RUN_CYCLES);
     }
   }
@@ -47,13 +51,11 @@ class ProcessScheduler {
    * Add a single process.
    */
   synchronized void addProcess(SimulatedProcess process) {
-    lastAssignedProcessNumber++;
-    process.setProcessNumber(lastAssignedProcessNumber);
+    process.setProcessNumber(++lastAssignedProcessNumber);
+    processControlBlock.add(process);
 
-    // Priority is ignored in this version.
-    processControlBlock.put(lastAssignedProcessNumber, process);
     if (cpu.isIdle()) {
-      cpu.runProcess(this, process, RUN_CYCLES);
+      cpu.runProcess(this, processControlBlock.poll(), RUN_CYCLES);
     }
   }
 
@@ -63,5 +65,5 @@ class ProcessScheduler {
   void removeProcess(SimulatedProcess p) {
     processControlBlock.remove(p.processNumber());
   }
+  }
 
-}
